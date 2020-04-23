@@ -15,9 +15,9 @@ public class WelcomeHandler {
 	public String welcome(Map<String, Object> model)
 	{
 		/** show all default users */
-
-		/** ADMIN */
 		
+		/** ADMIN */
+
 		/** SALESMANS */
 		
 		/** CUSTOMERS */
