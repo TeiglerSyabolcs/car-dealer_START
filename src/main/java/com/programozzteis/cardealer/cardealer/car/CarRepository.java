@@ -1,4 +1,4 @@
-package com.programozzteis.cardealer.car;
+package com.programozzteis.cardealer.cardealer.car;
 
 import java.util.List;
 
