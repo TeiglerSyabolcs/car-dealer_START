@@ -7,10 +7,9 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class BaseEntity {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	private Integer id;
 	
 	public Integer getId() {
@@ -20,7 +19,5 @@ public abstract class BaseEntity {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 	
-
 }

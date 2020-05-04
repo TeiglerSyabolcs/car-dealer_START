@@ -1,6 +1,8 @@
 package com.programozzteis.cardealer.cardealer.car;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -89,6 +91,10 @@ public class Car extends BaseEntity {
 
 	public void setSalesman(Salesman salesman) {
 		this.salesman = salesman;
+	}
+	public static List<CarType> getCarTypes()
+	{
+		return Arrays.asList(CarType.values());
 	}
 	
 	

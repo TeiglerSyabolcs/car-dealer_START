@@ -5,10 +5,10 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class NamedEntity extends BaseEntity {
-	
+
 	@Column(name = "name")
 	private String name;
-
+	
 	public String getName() {
 		return name;
 	}
@@ -16,5 +16,4 @@ public abstract class NamedEntity extends BaseEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-
 }
