@@ -11,7 +11,7 @@ public abstract class BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -19,5 +19,6 @@ public abstract class BaseEntity {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
 	
 }

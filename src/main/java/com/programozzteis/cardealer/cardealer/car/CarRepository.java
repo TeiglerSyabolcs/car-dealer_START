@@ -10,9 +10,10 @@ public interface CarRepository extends Repository<Car, Integer> {
 	List<Car> findAll();
 
 	Car findById(Integer carId);
-	
+
 	void delete(Car car);
 	
 	void save(Car car);
-	
+
+	void deleteById(Integer carId);
 }

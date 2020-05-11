@@ -1,6 +1,5 @@
 package com.programozzteis.cardealer.cardealer.customer;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -15,8 +14,8 @@ import com.programozzteis.cardealer.cardealer.car.CarRepository;
 public class CustomerController {
 
 	private CarRepository carRepo;
-	private CustomerRepository custRepo;
-	
+	private CustomerRepository custRepo;	
+
 	public CustomerController(CarRepository carRepo, CustomerRepository custRepo) {
 		super();
 		this.carRepo = carRepo;
@@ -29,54 +28,50 @@ public class CustomerController {
 			@PathVariable(name = "custId") int custId,
 			Map<String, Object> model)
 	{
-		Customer cust = this.custRepo.findById(custId);
-		model.put("customer", cust);
+		/** Customer with custId */
+		Customer customer = this.custRepo.findById(custId);
+		model.put("customer", customer);
 		
-		
-		List<Car> cars = this.carRepo.findAll();
-		model.put("cars", cars);
+		/** All Cars */
+		model.put("cars", this.carRepo.findAll());
 		
 		return "customers/customerDetails";
 	}
-
+	
 	
 	@GetMapping("/customer/{custId}/buycar/{carId}")
-	public String customerBuyCarById(
+	public String buyCarById(
 			@PathVariable(name = "custId") int custId,
 			@PathVariable(name = "carId") int carId,
 			Map<String, Object> model)
 	{
-		Customer cust = this.custRepo.findById(custId);
+		Customer customer = this.custRepo.findById(custId);
 		Car car = this.carRepo.findById(carId);
 		
-		int custMoney = cust.getCurrentMoney();
+		int customerMoney = customer.getCurrentMoney();
 		int carPrice = car.getPrice();
 		
-		if( custMoney >= carPrice )
+		
+		if( customerMoney > carPrice )
 		{
-			/** SUCCESS TO BUY */
-			
+			/** SUCCESS to BUY */
 			/** STEP 1 */
-			cust.setCurrentMoney(custMoney - carPrice);
+			customer.setCurrentMoney(customerMoney - carPrice);
 			
 			/** STEP 2 */
 			this.carRepo.delete(car);
 			
 			/** STEP 3 */
-			model.put("goodNews", "Congratulation to Buy this Car: " + car.getType());
-			
+			model.put("goodNews", "Congratulation for your new Car: " + car.getType());
 		}
 		else
 		{
-			/** FAILED */
-			
-			model.put("badNews", "Failed to Buy this Car: " + car.getType());
+			/** FAILED to BUY */
+			model.put("badNews", "Failed to buy the Car: " + car.getType());
 		}
-		model.put("customer", cust);
 		
-		
-		List<Car> cars = this.carRepo.findAll();
-		model.put("cars", cars);
+		model.put("customer", customer);
+		model.put("cars", this.carRepo.findAll());
 		
 		
 		return "customers/customerDetails";
@@ -84,26 +79,33 @@ public class CustomerController {
 	
 	
 	@GetMapping("/customer/{custId}/edit")
-	public String startEditFunc(
+	public String startEditCustomer(
 			@PathVariable(name = "custId") int custId,
 			Map<String, Object> model)
 	{
-		Customer cust = this.custRepo.findById(custId);
-		model.put("customer", cust);
+		/** Customer with custId */
+		Customer customer = this.custRepo.findById(custId);
+		model.put("customer", customer);
+		
 		
 		return "customers/updateCustomerForm";
 	}
 	
 	
 	@PostMapping("/customer/{custId}/edit")
-	public String finishEditFunc(
-			Customer cust,
+	public String finishEditCustomer(
+			Customer newCustomer,
 			@PathVariable(name = "custId") int custId,
 			Map<String, Object> model)
 	{
-		cust.setId(custId);
-		this.custRepo.save(cust);
+		newCustomer.setId(custId);
+		this.custRepo.save(newCustomer);
 		
 		return "redirect:/customer/{custId}";
 	}
+	
+	
+	
+	
+	
 }

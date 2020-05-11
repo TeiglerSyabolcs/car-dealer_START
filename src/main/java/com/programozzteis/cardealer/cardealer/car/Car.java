@@ -21,8 +21,6 @@ import com.programozzteis.cardealer.cardealer.salesman.Salesman;
 @Table(name = "advertisements")
 public class Car extends BaseEntity {
 
-
-	
 	@Column(name = "car_power")
 	private String power;
 	
@@ -43,7 +41,6 @@ public class Car extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "car_salesman_id")
 	private Salesman salesman;
-
 
 	public String getPower() {
 		return power;
@@ -92,11 +89,9 @@ public class Car extends BaseEntity {
 	public void setSalesman(Salesman salesman) {
 		this.salesman = salesman;
 	}
-	public static List<CarType> getCarTypes()
-	{
-		return Arrays.asList(CarType.values());
+	
+	public static CarType[] getCarTypes() {
+		return CarType.values();
 	}
-	
-	
 	
 }

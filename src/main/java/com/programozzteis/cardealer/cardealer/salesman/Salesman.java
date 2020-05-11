@@ -2,7 +2,6 @@ package com.programozzteis.cardealer.cardealer.salesman;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -14,7 +13,7 @@ import com.programozzteis.cardealer.cardealer.model.NamedEntity;
 @Table(name = "salesmans")
 public class Salesman extends NamedEntity {
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "salesman")
+	@OneToMany(mappedBy = "salesman")
 	private List<Car> cars;
 
 	public List<Car> getCars() {
@@ -25,9 +24,9 @@ public class Salesman extends NamedEntity {
 		this.cars = cars;
 	}
 	
-	public void addCar(Car car)
-	{
+	public void addCar(Car car) {
 		this.cars.add(car);
+		car.setSalesman(this);
 	}
-		
+	
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.programozzteis.cardealer.cardealer.admin.AdminRepository;
 import com.programozzteis.cardealer.cardealer.customer.CustomerRepository;
 import com.programozzteis.cardealer.cardealer.salesman.SalesmanRepository;
 
@@ -12,14 +13,15 @@ import com.programozzteis.cardealer.cardealer.salesman.SalesmanRepository;
 @Controller  
 public class WelcomeHandler {
 
+	private CustomerRepository custRepo;
+	private SalesmanRepository smanRepo;
+	private AdminRepository adminRepo;
 
-	private CustomerRepository customerRepository;
-	private SalesmanRepository salesmanRepository;
-	
-	public WelcomeHandler(CustomerRepository customerRepository, SalesmanRepository salesmanRepository) {
+	public WelcomeHandler(CustomerRepository custRepo, SalesmanRepository smanRepo, AdminRepository adminRepo) {
 		super();
-		this.customerRepository = customerRepository;
-		this.salesmanRepository = salesmanRepository;
+		this.custRepo = custRepo;
+		this.smanRepo = smanRepo;
+		this.adminRepo = adminRepo;
 	}
 
 
@@ -30,12 +32,13 @@ public class WelcomeHandler {
 		/** show all default users */
 
 		/** ADMIN */
+		model.put("admins", this.adminRepo.findAll());
 		
 		/** SALESMANS */
-		model.put("salesmans", this.salesmanRepository.findAll());
+		model.put("salesmans", this.smanRepo.findAll());
 		
 		/** CUSTOMERS */
-		model.put("customers", this.customerRepository.findAll());
+		model.put("customers", this.custRepo.findAll());
 		
 		
 		return "welcome";

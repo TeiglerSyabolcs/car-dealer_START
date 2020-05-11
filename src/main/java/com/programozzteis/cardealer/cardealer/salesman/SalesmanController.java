@@ -10,16 +10,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.programozzteis.cardealer.cardealer.car.Car;
 import com.programozzteis.cardealer.cardealer.car.CarRepository;
+import com.programozzteis.cardealer.cardealer.car.CarType;
 
 @Controller
 public class SalesmanController {
 
-	private SalesmanRepository salesmanRepo;
+	private SalesmanRepository smanRepo;
 	private CarRepository carRepo;
-	
-	public SalesmanController(SalesmanRepository salesmanRepo, CarRepository carRepo) {
+
+	public SalesmanController(SalesmanRepository smanRepo, CarRepository carRepo) {
 		super();
-		this.salesmanRepo = salesmanRepo;
+		this.smanRepo = smanRepo;
 		this.carRepo = carRepo;
 	}
 
@@ -30,20 +31,21 @@ public class SalesmanController {
 			@PathVariable(name = "smanId") int smanId,
 			Map<String, Object> model)
 	{
-		Salesman sman = this.salesmanRepo.findById(smanId);
+		Salesman sman = this.smanRepo.findById(smanId);
 		model.put("salesman", sman);
-
-		List<Car> cars = sman.getCars();
-		model.put("cars", cars);
+		
+		List<Car> smanCars = sman.getCars();
+		model.put("cars", smanCars);
 		
 		
 		return "salesman/salesmanDetails";
 	}
 	
 	
-	
-	@GetMapping("/salesman/*/new")
-	public String startAddNewCar(Map<String, Object> model)
+	@GetMapping("/salesman/{smanId}/new")
+	public String startCreateNewAd(
+			@PathVariable(name = "smanId") int smanId,
+			Map<String, Object> model)
 	{
 		Car newCar = new Car();
 		model.put("car", newCar);
@@ -56,24 +58,67 @@ public class SalesmanController {
 	
 	
 	@PostMapping("/salesman/{smanId}/new")
-	public String finishAddNewCar(
-			Car car,
+	public String finishCreateNewAd(
+			Car newCar,
 			@PathVariable(name = "smanId") int smanId,
 			Map<String, Object> model)
 	{
-		/** Connect CAR and SALESMAN */
-		Salesman sman = this.salesmanRepo.findById(smanId);
-		sman.addCar(car);
+		Salesman sman = this.smanRepo.findById(smanId);
+		sman.addCar(newCar);
 		
-		/** Save CAR to DB */
-		car.setSalesman(sman);
-		this.carRepo.save(car);
-		
-		model.put("salesman", sman);
-		model.put("cars", sman.getCars());
+		this.carRepo.save(newCar);
 		
 		
 		return "redirect:/salesman/{smanId}";
+	}
+
+	
+	@GetMapping("/salesman/find")
+	public String startFindSalesman(Map<String, Object> model)
+	{
+		Salesman sman = new Salesman();
+		model.put("salesman", sman);
+		
+		return "salesman/findSalesman";
+	}
+	
+	
+	@GetMapping("/salesman")
+	public String finishFindSalesman(
+			Salesman salesman,
+			Map<String, Object> model)
+	{
+		
+		String searchedName = salesman.getName();
+		
+		String destinationURL = "";
+		String searchResult = "";
+		
+		
+		List<Salesman> results = this.smanRepo.findByName(searchedName);
+		
+		/** EMPTY */
+		if(results.isEmpty())
+		{
+			destinationURL = "salesman/findSalesman";
+			searchResult = "Noone has found with name: " + searchedName;
+		}
+		/** 1 */
+		else if(results.size() == 1)
+		{
+			destinationURL = "redirect:/salesman/" + ((results.get(0)).getId());
+		}
+		/** >1 */
+		else
+		{
+			destinationURL = "salesman/findSalesman";
+			searchResult = "More Salesman has found with name: " + searchedName;
+		}
+		
+		model.put("searchResult", searchResult);
+		
+		
+		return destinationURL;
 	}
 	
 }
